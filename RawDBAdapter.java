@@ -1,9 +1,9 @@
 package cn.g.GAndroidDBAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
+
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -63,6 +63,11 @@ public abstract class RawDBAdapter {
 			dBHelper.close();
 		}
 	}
+	
+	//正在操作的数据库
+	public abstract MyDBAdapter setOperateTabelName(String tableName);
+	public abstract String getNowOperateTabelName();
+
 	
 	
     //-----------------DB的CRUD操作----------------------

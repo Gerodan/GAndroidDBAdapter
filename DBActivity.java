@@ -41,13 +41,21 @@ public class DBActivity extends Activity implements OnClickListener {
 
 	}
 
-	private void initDBConn() {
-		String createSQL="create table books (id text primary key , "
-							+ "isbn text not null, title text not null, price numeric(7,3) not null,"
-									+ "publisher text not null);";
+	private void initDBConn() { 
+		//初始化,实例化表students
+		String createSQL="create table students (id text primary key , "
+			+ "name text not null, marjor text not null, age numeric(7,1) not null);";
+		
+		mdba= new MyDBAdapter(this, "BookDB", "students", createSQL);
+		//mdba.getDBConn().execSQL(createSQL);
+		//初始化,实例化表books
+	    createSQL="create table books (id text primary key , "
+					+ "isbn text not null, title text not null, price numeric(7,3) not null,"
+							+ "publisher text not null);";
 
-		mdba= new MyDBAdapter(this, "BookDB", "books", createSQL);		
-	}
+		mdba= new MyDBAdapter(this, "BookDB", "books", createSQL);
+		//mdba.getDBConn().execSQL(createSQL); 		
+	} 
 
 	private void initControls() {
 		this.findViewById(R.id.button06).setOnClickListener(this);
@@ -85,6 +93,13 @@ public class DBActivity extends Activity implements OnClickListener {
 		tb.setTitle("HeiHei");
 		mdba.insert(tb);
 		
+		StudentBean stub=new StudentBean();
+		stub.setAge(20);
+		stub.setId(UUID.randomUUID().toString());
+		stub.setMarjor("数学");
+		stub.setName("张飞");
+		mdba.setOperateTabelName("students").insert(stub);
+		
 		//关闭数据库连接
 		mdba.closeConn();
 		
@@ -93,7 +108,7 @@ public class DBActivity extends Activity implements OnClickListener {
 	private void queryOne() {
 		//调用修改(先选出)
 		//调用查询一个
-		try {
+		try { 
 			TitleBean titleBean = mdba.getOneByWhere(TitleBean.class," where id='afbd7264-939e-45af-9be4-9db299878317'");
 			titleBean.setPrice(10.5);
 			titleBean.setPublisher("合工大出版社");
@@ -109,7 +124,7 @@ public class DBActivity extends Activity implements OnClickListener {
 
 	private void queryAll() {
 		//调用查询多个
-		ArrayList<TitleBean> titleList = mdba.getManyByWhere(TitleBean.class," ");
+		ArrayList<TitleBean> titleList = mdba.setOperateTabelName("students").getManyByWhere(StudentBean.class," ");
 		
 		//关闭数据库连接
 		mdba.closeConn();

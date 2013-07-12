@@ -1,7 +1,6 @@
 package cn.g.GAndroidDBAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -93,6 +92,18 @@ public class MyDBAdapter extends RawDBAdapter{
 		insertString.append(strWhere);
 		
 		db.execSQL(insertString.toString());
+	}
+
+	@Override
+	//设置过要操作的 数据表名 之后,返回操作对象,实现"链式编程"
+	public MyDBAdapter setOperateTabelName(String tableName) {
+		this.DATABASE_TABLE_NAME=tableName;
+		return this;
+	}
+
+	@Override
+	public String getNowOperateTabelName() {
+		return this.DATABASE_TABLE_NAME;
 	}
 
 }
