@@ -1,8 +1,6 @@
 package cn.g.GAndroidDBAdapter;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -14,18 +12,16 @@ public abstract class RawDBAdapter {
 	//创建数据库和创建表在这里执行,需要名字
 	private String DATABASE_NAME;
 	private String DATABASE_TABLE_NAME;
-	private String DATABASE_CREATE_SQL;
 	
 	private static final int DATABASE_VERSION = 1;
 	private final Context context;
 	private DataBaseHelper dBHelper;
 
 	//new这个类的时候创建了DB,创建了表
-	public RawDBAdapter(Context ctx ,String dbName,String tableName,String createSQL) {
+	public RawDBAdapter(Context ctx ,String dbName,String tableName) {
 		this.context = ctx;
 		this.DATABASE_NAME=dbName;
 		this.DATABASE_TABLE_NAME=tableName;
-		this.DATABASE_CREATE_SQL=createSQL;
 		dBHelper = new DataBaseHelper(context);
 	}
 
@@ -37,7 +33,7 @@ public abstract class RawDBAdapter {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(DATABASE_CREATE_SQL);
+			//不需要在new对象的时候创建数据库
 		}
 
 		//数据库升级的时候调用(删除所有旧数据,只复制表结构)
@@ -56,6 +52,11 @@ public abstract class RawDBAdapter {
 			return dBHelper.getWritableDatabase();
 	}
 	
+	// ---得到DBHelper(对DB的整体版本的管理)---
+	public DataBaseHelper getDBHelper() {
+		return dBHelper;
+	}
+	
 	// ---关闭数据库---
 	public void closeConn() {
 		//有就关闭,否则不用关闭
@@ -67,6 +68,7 @@ public abstract class RawDBAdapter {
 	//正在操作的数据库
 	public abstract MyDBAdapter setOperateTabelName(String tableName);
 	public abstract String getNowOperateTabelName();
+	public abstract void createTabel(String createTableSQL);
 
 	
 	
@@ -85,4 +87,7 @@ public abstract class RawDBAdapter {
 
 	// ---更新---
 	public abstract <T> void update(T beanInstance,String strWhere);
+	
+	// ---执行其他复杂的SQL---
+	public abstract void executeMySQL(String sql);
 }

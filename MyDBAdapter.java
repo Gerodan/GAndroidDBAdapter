@@ -11,8 +11,8 @@ public class MyDBAdapter extends RawDBAdapter{
 	private SQLiteDatabase db;
 
 
-	public MyDBAdapter(Context ctx, String dbName, String tableName, String createSQL) {
-		super(ctx, dbName, tableName, createSQL);
+	public MyDBAdapter(Context ctx, String dbName, String tableName) {
+		super(ctx, dbName, tableName);
 		this.DATABASE_TABLE_NAME=tableName;
 		this.db=super.getDBConn();
 	}
@@ -104,6 +104,18 @@ public class MyDBAdapter extends RawDBAdapter{
 	@Override
 	public String getNowOperateTabelName() {
 		return this.DATABASE_TABLE_NAME;
+	}
+
+	@Override
+	public void createTabel(String createTableSQL) {
+		this.db=super.getDBConn();
+		db.execSQL(createTableSQL);
+	}
+
+	@Override
+	public void executeMySQL(String sql) {
+		this.db=super.getDBConn();
+		db.execSQL(sql);		
 	}
 
 }

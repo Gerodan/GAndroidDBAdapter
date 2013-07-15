@@ -46,15 +46,15 @@ public class DBActivity extends Activity implements OnClickListener {
 		String createSQL="create table students (id text primary key , "
 			+ "name text not null, marjor text not null, age numeric(7,1) not null);";
 		
-		mdba= new MyDBAdapter(this, "BookDB", "students", createSQL);
-		//mdba.getDBConn().execSQL(createSQL);
+		mdba= new MyDBAdapter(this, "BookDB", "students");
+		//mdba.createTabel(createSQL);
 		//初始化,实例化表books
 	    createSQL="create table books (id text primary key , "
 					+ "isbn text not null, title text not null, price numeric(7,3) not null,"
 							+ "publisher text not null);";
 
-		mdba= new MyDBAdapter(this, "BookDB", "books", createSQL);
-		//mdba.getDBConn().execSQL(createSQL); 		
+		mdba= new MyDBAdapter(this, "BookDB", "books");
+		//mdba.createTabel(createSQL);	
 	} 
 
 	private void initControls() {
@@ -91,7 +91,7 @@ public class DBActivity extends Activity implements OnClickListener {
 		tb.setPrice(50.65);
 		tb.setPublisher("Huaqiyinhang");
 		tb.setTitle("HeiHei");
-		mdba.insert(tb);
+		mdba.setOperateTabelName("books").insert(tb);
 		
 		StudentBean stub=new StudentBean();
 		stub.setAge(20);
@@ -109,7 +109,7 @@ public class DBActivity extends Activity implements OnClickListener {
 		//调用修改(先选出)
 		//调用查询一个
 		try { 
-			TitleBean titleBean = mdba.getOneByWhere(TitleBean.class," where id='afbd7264-939e-45af-9be4-9db299878317'");
+			TitleBean titleBean = mdba.setOperateTabelName("books").getOneByWhere(TitleBean.class," where id='51a5c456-9c7c-418d-957d-4b5f2b0208ec'");
 			titleBean.setPrice(10.5);
 			titleBean.setPublisher("合工大出版社");
 			titleBean.setIsbn("Xiugaile");
@@ -124,7 +124,7 @@ public class DBActivity extends Activity implements OnClickListener {
 
 	private void queryAll() {
 		//调用查询多个
-		ArrayList<TitleBean> titleList = mdba.setOperateTabelName("students").getManyByWhere(StudentBean.class," ");
+		ArrayList<TitleBean> titleList = mdba.setOperateTabelName("books").getManyByWhere(TitleBean.class," ");
 		
 		//关闭数据库连接
 		mdba.closeConn();
